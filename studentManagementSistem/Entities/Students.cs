@@ -9,13 +9,17 @@ namespace StudentManagementSystem.Entities
         [Key]
         public int Id { get; set; }
 
-        [Required ]
+        [Required]
         public string Name { get; set; }
-        
+
+        [Required]
+        public string Surname { get; set; }
+
         public string Email { get; set; }
 
-        [Required ]
+        [Required]
         public string PersonalNumber { get; set; }
+
         public string Address { get; set; }
     }
 }

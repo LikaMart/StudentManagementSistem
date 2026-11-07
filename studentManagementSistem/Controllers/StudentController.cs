@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StudentManagementSystem.Db;
 using StudentManagementSystem.Entities;
 
@@ -9,20 +8,23 @@ namespace StudentManagementSystem.Controllers;
 [ApiController]
 public class StudentController : ControllerBase
 {
-
     private readonly StudentDbContext _Db;
-
 
     public StudentController()
     {
         _Db = new StudentDbContext();
     }
 
-    // GET: api/<StudentController>
     [HttpGet("students")]
-    public List<Students> Getallstudents()
+    public List<Students> GetAllStudents()
     {
         return _Db.Students.ToList();
+    }
+
+    [HttpGet("student/{id}")]
+    public Students GetStudentById(int id)
+    {
+        return _Db.Students.FirstOrDefault(x => x.Id == id);
     }
 
     [HttpPost("addstudent")]
@@ -36,31 +38,52 @@ public class StudentController : ControllerBase
     public bool DeleteStudent(int id)
     {
         var student = _Db.Students.FirstOrDefault(x => x.Id == id);
+
         if (student != null)
         {
             _Db.Students.Remove(student);
             _Db.SaveChanges();
             return true;
         }
+
         return false;
     }
 
     [HttpPut("updatestudent")]
-public bool UpdateStudentEmail(int id, string newEmail)
+    public bool UpdateStudent(Students st)
     {
-        var student = _Db.Students.FirstOrDefault(x => x.Id == id);
+        var student = _Db.Students.FirstOrDefault(x => x.Id == st.Id);
+
         if (student != null)
         {
-            student.Name = newEmail;
+            student.Name = st.Name;
+            student.Surname = st.Surname;
+            student.Email = st.Email;
+            student.PersonalNumber = st.PersonalNumber;
+            student.Address = st.Address;
+
+            _Db.SaveChanges();
+            return true;
+        }
+
+        return false;
+    }
+
+    [HttpPut("updateemail")]
+    public bool UpdateStudentEmail(int id, string newEmail)
+    {
+        var student = _Db.Students.FirstOrDefault(x => x.Id == id);
+
+        if (student != null)
+        {
             student.Email = newEmail;
             _Db.SaveChanges();
             return true;
         }
+
         return false;
     }
 }
-
-
 
 
 
